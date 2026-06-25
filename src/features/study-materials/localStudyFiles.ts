@@ -1,13 +1,6 @@
-export const MAX_LOCAL_PDF_SIZE = 20 * 1024 * 1024;
+import type { LocalStudyFile } from "../../shared/types/models";
 
-export interface LocalStudyFile {
-  id: string;
-  title: string;
-  fileName: string;
-  size: number;
-  createdAt: string;
-  data: Blob;
-}
+export const MAX_LOCAL_PDF_SIZE = 20 * 1024 * 1024;
 
 export function isPdfFile(file: File): boolean {
   return file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
@@ -28,6 +21,8 @@ export function openLocalPdf(file: LocalStudyFile): void {
   anchor.href = url;
   anchor.target = "_blank";
   anchor.rel = "noopener noreferrer";
+  document.body.appendChild(anchor);
   anchor.click();
+  anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
