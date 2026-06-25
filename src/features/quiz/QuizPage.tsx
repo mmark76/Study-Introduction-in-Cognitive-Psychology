@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { flashcards } from "../../data/flashcards";
 import { studyDatabase } from "../../infrastructure/database/studyDatabase";
 import { createId } from "../../shared/utils/id";
+import { useStudyContent } from "../content-import/useStudyContent";
 import { buildQuiz } from "./quiz";
 
 export function QuizPage() {
-  const questions = useMemo(() => buildQuiz(flashcards), []);
+  const { flashcards } = useStudyContent();
+  const questions = useMemo(() => buildQuiz(flashcards), [flashcards]);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
@@ -26,7 +27,7 @@ export function QuizPage() {
     }
   }
 
-  if (questions.length === 0) return <section className="empty-state"><h2>The quiz is not available yet</h2><p>At least four cards with different answers are required.</p></section>;
+  if (questions.length === 0) return <section className="empty-state"><h2>The quiz is not available yet</h2><p>Import at least four cards with different answers.</p></section>;
   if (finished) return <section className="empty-state"><h2>Result: {score} / {questions.length}</h2><button className="button primary" onClick={() => window.location.reload()}>New quiz</button></section>;
 
   return (
