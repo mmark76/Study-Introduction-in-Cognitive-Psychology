@@ -3,16 +3,16 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "/Study-Introduction-in-Cognitive-Psychology/",
+  base: "/Markellos-Study-App/",
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["study-icon.svg"],
       manifest: {
-        name: "Generic Study App",
+        name: "Markellos Study App",
         short_name: "Study App",
-        description: "Local-first study application for any subject",
+        description: "A private study space for any subject",
         theme_color: "#172554",
         background_color: "#f8fafc",
         display: "standalone",
