@@ -1,17 +1,18 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo, useRef, useState } from "react";
-import { flashcards } from "../../data/flashcards";
 import { studyDatabase } from "../../infrastructure/database/studyDatabase";
 import type { Rating } from "../../shared/types/models";
 import { isDue } from "../../shared/utils/date";
+import { useStudyContent } from "../content-import/useStudyContent";
 import { scheduleReview } from "./spacedRepetition";
 
 export function ReviewPage() {
+  const { flashcards } = useStudyContent();
   const progress = useLiveQuery(() => studyDatabase.cardProgress.toArray(), []) ?? [];
   const dueCards = useMemo(() => {
     const dueIds = new Set(progress.filter((item) => isDue(item.nextReviewAt)).map((item) => item.cardId));
     return flashcards.filter((card) => dueIds.has(card.id));
-  }, [progress]);
+  }, [flashcards, progress]);
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const lock = useRef(false);
