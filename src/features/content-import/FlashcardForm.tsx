@@ -9,11 +9,13 @@ function splitCommaList(value: string): string[] {
 
 export function FlashcardForm({
   units,
-  flashcards,
+  existingFlashcards,
+  importedFlashcards,
   onMessage,
 }: {
   units: readonly StudyUnit[];
-  flashcards: readonly Flashcard[];
+  existingFlashcards: readonly Flashcard[];
+  importedFlashcards: readonly Flashcard[];
   onMessage: (message: string) => void;
 }) {
   const [unitId, setUnitId] = useState("");
@@ -29,7 +31,7 @@ export function FlashcardForm({
       return;
     }
 
-    const unitCards = flashcards.filter((card) => card.unitId === selectedUnit.id);
+    const unitCards = existingFlashcards.filter((card) => card.unitId === selectedUnit.id);
     const nextNumber = Math.max(0, ...unitCards.map((card) => card.number)) + 1;
     const nextCard: Flashcard = {
       id: `card-${crypto.randomUUID()}`,
@@ -45,7 +47,7 @@ export function FlashcardForm({
       return;
     }
 
-    await studyDatabase.settings.put({ key: IMPORTED_FLASHCARDS_SETTING_KEY, value: [...flashcards, nextCard] });
+    await studyDatabase.settings.put({ key: IMPORTED_FLASHCARDS_SETTING_KEY, value: [...importedFlashcards, nextCard] });
     setQuestion("");
     setAnswer("");
     setTags("");
