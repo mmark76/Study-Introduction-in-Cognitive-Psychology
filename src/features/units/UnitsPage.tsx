@@ -1,7 +1,9 @@
 import { studyConfig } from "../../app/studyConfig";
-import { units } from "../../data/units";
+import { useStudyContent } from "../content-import/useStudyContent";
 
 export function UnitsPage() {
+  const { units } = useStudyContent();
+
   return (
     <div className="stack-lg">
       <header className="page-heading">
@@ -10,7 +12,7 @@ export function UnitsPage() {
         <p>Objectives, summaries, and key terms for each unit.</p>
       </header>
       {units.length === 0 ? (
-        <section className="empty-state"><h3>There are no units yet</h3><p>The template intentionally starts empty.</p></section>
+        <section className="empty-state"><h3>There are no units yet</h3><p>Import a units JSON file from the <strong>Import</strong> page.</p></section>
       ) : (
         <div className="card-grid">
           {units.map((unit) => (
