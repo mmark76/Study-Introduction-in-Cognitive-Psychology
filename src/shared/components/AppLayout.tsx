@@ -8,7 +8,7 @@ const navigation = [
   ["/review", "Review"],
   ["/quiz", "Quiz"],
   ["/progress", "Progress"],
-  ["/import", "Import"],
+  ["/import", "Add content"],
   ["/study-materials", "Study materials"]
 ] as const;
 
@@ -24,7 +24,7 @@ export function AppLayout() {
     <div className="app-shell">
       <header className="app-header">
         <div>
-          <p className="eyebrow">Local-first learning</p>
+          <p className="eyebrow">Your private study space</p>
           <h1>{studyConfig.appName}</h1>
           {studyConfig.subjectName ? <p>{studyConfig.subjectName}</p> : null}
         </div>
