@@ -25,9 +25,12 @@ export function ContentImportPage() {
     if (!file) return;
 
     try {
-      const nextUnits = parseUnitsSpreadsheet(await readFile(file));
+      const spreadsheetUnits = parseUnitsSpreadsheet(await readFile(file));
+      const byNumber = new Map(importedUnits.map((unit) => [unit.number, unit]));
+      for (const unit of spreadsheetUnits) byNumber.set(unit.number, unit);
+      const nextUnits = [...byNumber.values()].sort((first, second) => first.number - second.number);
       await studyDatabase.settings.put({ key: IMPORTED_UNITS_SETTING_KEY, value: nextUnits });
-      setMessage(`${nextUnits.length} unit${nextUnits.length === 1 ? "" : "s"} added successfully.`);
+      setMessage(`${spreadsheetUnits.length} unit${spreadsheetUnits.length === 1 ? "" : "s"} added or updated successfully.`);
     } catch {
       setMessage("We could not read the units file. Download a fresh template and keep the column headings unchanged.");
     } finally {
@@ -40,9 +43,12 @@ export function ContentImportPage() {
     if (!file) return;
 
     try {
-      const nextFlashcards = parseFlashcardsSpreadsheet(await readFile(file), units);
+      const spreadsheetFlashcards = parseFlashcardsSpreadsheet(await readFile(file), units);
+      const byId = new Map(importedFlashcards.map((card) => [card.id, card]));
+      for (const card of spreadsheetFlashcards) byId.set(card.id, card);
+      const nextFlashcards = [...byId.values()];
       await studyDatabase.settings.put({ key: IMPORTED_FLASHCARDS_SETTING_KEY, value: nextFlashcards });
-      setMessage(`${nextFlashcards.length} flashcard${nextFlashcards.length === 1 ? "" : "s"} added successfully.`);
+      setMessage(`${spreadsheetFlashcards.length} flashcard${spreadsheetFlashcards.length === 1 ? "" : "s"} added or updated successfully.`);
     } catch {
       setMessage("We could not read the flashcards file. Make sure its unit numbers match units already added to the app.");
     } finally {
