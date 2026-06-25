@@ -1,6 +1,10 @@
 import Dexie, { type EntityTable } from "dexie";
-import type { LocalStudyFile } from "../../features/study-materials/localStudyFiles";
-import type { AppSetting, CardProgress, StudySession } from "../../shared/types/models";
+import type {
+  AppSetting,
+  CardProgress,
+  LocalStudyFile,
+  StudySession,
+} from "../../shared/types/models";
 
 class StudyDatabase extends Dexie {
   cardProgress!: EntityTable<CardProgress, "cardId">;
