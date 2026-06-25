@@ -1,11 +1,11 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { flashcards } from "../../data/flashcards";
-import { units } from "../../data/units";
+import { studyConfig } from "../../app/studyConfig";
 import { studyDatabase } from "../../infrastructure/database/studyDatabase";
 import { isDue } from "../../shared/utils/date";
-import { studyConfig } from "../../app/studyConfig";
+import { useStudyContent } from "../content-import/useStudyContent";
 
 export function HomePage() {
+  const { units, flashcards } = useStudyContent();
   const progress = useLiveQuery(() => studyDatabase.cardProgress.toArray(), []) ?? [];
   const due = progress.filter((item) => isDue(item.nextReviewAt)).length;
 
@@ -25,7 +25,7 @@ export function HomePage() {
       {units.length === 0 && flashcards.length === 0 ? (
         <section className="empty-state">
           <h3>The content is empty</h3>
-          <p>Add units and cards in <code>src/data/units.ts</code> and <code>src/data/flashcards.ts</code>.</p>
+          <p>Use the <strong>Import</strong> page to add units and flashcards.</p>
         </section>
       ) : null}
     </div>
