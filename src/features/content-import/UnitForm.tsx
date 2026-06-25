@@ -11,7 +11,15 @@ function splitCommaList(value: string): string[] {
   return value.split(",").map((item) => item.trim()).filter(Boolean);
 }
 
-export function UnitForm({ units, onMessage }: { units: readonly StudyUnit[]; onMessage: (message: string) => void }) {
+export function UnitForm({
+  existingUnits,
+  importedUnits,
+  onMessage,
+}: {
+  existingUnits: readonly StudyUnit[];
+  importedUnits: readonly StudyUnit[];
+  onMessage: (message: string) => void;
+}) {
   const [title, setTitle] = useState("");
   const [objectives, setObjectives] = useState("");
   const [summary, setSummary] = useState("");
@@ -19,7 +27,7 @@ export function UnitForm({ units, onMessage }: { units: readonly StudyUnit[]; on
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const nextNumber = Math.max(0, ...units.map((unit) => unit.number)) + 1;
+    const nextNumber = Math.max(0, ...existingUnits.map((unit) => unit.number)) + 1;
     const nextUnit: StudyUnit = {
       id: `unit-${crypto.randomUUID()}`,
       number: nextNumber,
@@ -34,7 +42,7 @@ export function UnitForm({ units, onMessage }: { units: readonly StudyUnit[]; on
       return;
     }
 
-    await studyDatabase.settings.put({ key: IMPORTED_UNITS_SETTING_KEY, value: [...units, nextUnit] });
+    await studyDatabase.settings.put({ key: IMPORTED_UNITS_SETTING_KEY, value: [...importedUnits, nextUnit] });
     setTitle("");
     setObjectives("");
     setSummary("");
